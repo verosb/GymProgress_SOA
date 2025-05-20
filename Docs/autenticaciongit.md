@@ -11,8 +11,8 @@
 # 🌐 Paso 2: Configurar el backend para GitHub
 - En el backend se añadieron las credenciales `Client ID` y `Client Secret`.
 
-![Configuración de la app en Facebook](./imagenes/git%202.jpg)
-![Configuración de la app en Facebook](/imagenes/git%201.jpg)
+![Configuración de la app en GitHub](./imagenes/git%201.jpg)
+![Configuración de la app en Github](./imagenes/git%202.jpg)
 
 
 ---
@@ -23,7 +23,7 @@
 
 ## ⚙️ En el backend (UserController)
 
-- Insertamos el **App ID** y **App Secret** obtenidos de Facebook en el controlador encargado de la autenticación.
+- Insertamos el **App ID** y **Client ID** obtenidos de Github en el controlador encargado de la autenticación.
 - Estas credenciales se usan para validar el token de acceso que envía el frontend.
 - Así, el backend puede verificar que el token es válido y autenticar al usuario correctamente.
 - Se implementó el endpoint que recibe el código de autorización que GitHub envía tras la autenticación.
@@ -32,9 +32,9 @@
 
 ---
 
-## 🌐 En el frontend (facebook.ts)
+## 🌐 En el frontend (github.service.ts)
 
-- Configuramos el servicio para usar el SDK de Facebook y obtener el token de acceso (`accessToken`).
+- Configuramos el servicio para usar el SDK de GitHub y obtener el token de acceso (`accessToken`).
 - Luego, enviamos ese token al backend para que realice la validación con las credenciales.
 - Esto permite que la autenticación sea segura y centralizada en el servidor.
 
