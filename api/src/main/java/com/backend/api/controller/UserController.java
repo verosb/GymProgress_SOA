@@ -1,5 +1,4 @@
 package com.backend.api.controller;
-
 import com.backend.api.model.User;
 import com.backend.api.repository.UserRepository;
 import com.backend.api.util.JwtUtil;
