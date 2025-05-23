@@ -59,6 +59,8 @@ input {
   width: 100%;
   padding: 12px;
   border: 1px solid #ddd;
+  background-color: white;
+  color: 333;
   border-radius: 4px;
   font-size: 14px;
   transition: border 0.3s;
@@ -118,4 +120,71 @@ footer a:hover {
   width: 40px;
   height: 40px;
   color: black;
+}
+
+/* Nuevos estilos para inicio de sesión con redes sociales */
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 15px 0;
+}
+
+.separator span {
+  display: inline-block;
+  padding: 0 10px;
+  color: #777;
+  font-size: 14px;
+}
+
+.separator::before,
+.separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #ddd;
+}
+
+.social-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 5px;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.social-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.social-btn.google:hover {
+  border-color: #DB4437;
+}
+
+.social-btn.facebook:hover {
+  border-color: #1877F2;
+}
+
+.social-btn.github:hover {
+  border-color: #333;
+}
+
+/* Media query para pantallas más pequeñas */
+@media (max-width: 430px) {
+  .container {
+    width: 90%;
+    max-width: 400px;
+  }
 }
