@@ -1,30 +1,69 @@
 import { Injectable } from '@angular/core';
-import axios from 'axios'; //Libreria para hacer peticiones HTTP al backend 
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Observable, catchError, throwError, of } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { map } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root', 
+  providedIn: 'root',
 })
 export class AuthService {
-  private readonly registerURL = 'http://localhost:8080/api/users'; 
+  private readonly apiUrl = environment.apiUrl + '/users';
 
-  async registerUser(userData: any): Promise<any> {
-    try {
-      const response = await axios.post(this.registerURL, userData);
-      console.log('Datos enviados desde el service (frontend)');
-      return response.data;
-    } catch (error) {
-      console.log('Error: ', error);
-    }
+  constructor(private http: HttpClient, private router: Router) {}
+
+  registerUser(userData: any): Observable<any> {
+    return this.http
+      .post(`${this.apiUrl}`, userData, {
+        withCredentials: true,
+      })
+      .pipe(catchError(this.handleError));
   }
 
-  private readonly loginUrl = 'http://localhost:8080/api/users/login';
+  loginUser(userDataLogin: any): Observable<any> {
+    return this.http
+      .post(`${this.apiUrl}/login`, userDataLogin, {
+        withCredentials: true,
+      })
+      .pipe(catchError(this.handleError));
+  }
 
-  async loginUser(userDataLogin: any): Promise<any> {
-    try {
-      const response = await axios.post(this.loginUrl, userDataLogin);
-      return response.data;
-    } catch (error) {
-      console.log('Error de login.service: ', error);
-    }
+  isLogin(): Observable<boolean> {
+    return this.http.get(`${this.apiUrl}/isLogin`, {
+      withCredentials: true,
+      observe: 'response',
+    }).pipe(
+      map(response => {
+        console.log('Usuario autenticado');
+        return true;
+      }),
+      catchError(error => {
+        if (error.status === 401) {
+          console.log('Usuario no autenticado');
+        } else {
+          console.error('Error inesperado en isLogin.service:', error);
+        }
+        return of(false);
+      })
+    );
+  }
+
+
+  logout(): Observable<void> {
+    return this.http
+      .post<void>(
+        `${this.apiUrl}/logout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      )
+      .pipe(catchError(this.handleError));
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    console.error('Error en AuthService:', error);
+    return throwError(() => new Error('Ocurrió un error en la autenticación'));
   }
 }

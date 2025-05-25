@@ -1,0 +1,62 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="logo">
+      <a>
+        <svg width="48" height="48" viewBox="0 0 256 256">
+          <path
+            fill="currentColor"
+            d="M248 120h-8V88a16 16 0 0 0-16-16h-16v-8a16 16 0 0 0-16-16h-24a16 16 0 0 0-16 16v56h-48V64a16 16 0 0 0-16-16H64a16 16 0 0 0-16 16v8H32a16 16 0 0 0-16 16v32H8a8 8 0 0 0 0 16h8v32a16 16 0 0 0 16 16h16v8a16 16 0 0 0 16 16h24a16 16 0 0 0 16-16v-56h48v56a16 16 0 0 0 16 16h24a16 16 0 0 0 16-16v-8h16a16 16 0 0 0 16-16v-32h8a8 8 0 0 0 0-16M32 168V88h16v80Zm56 24H64V64h24zm104 0h-24V64h24zm32-24h-16V88h16Z"
+          />
+        </svg>
+      </a>
+    </div>
+
+    <div class="menu-toggle" (click)="toggleMenu()">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <ul class="nav-menu" [ngClass]="{ active: isMenuOpen }">
+      <li class="nav-item">
+        <a [routerLink]="'/dashboard/home'" class="nav-link active">Inicio</a>
+      </li>
+      <li class="nav-item">
+        <a [routerLink]="'/dashboard/routines'" class="nav-link">Rutinas</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link">Entrenadores</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link">Precios</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link">Contacto</a>
+      </li>
+    </ul>
+
+    <div class="nav-buttons">
+      <button class="btn logOut-btn" (click)="logout()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="30"
+          height="30"
+          viewBox="0 0 24 24"
+        >
+          <g
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+          >
+            <path
+              d="M14 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-2"
+            />
+            <path d="M9 12h12l-3-3m0 6l3-3" />
+          </g>
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
