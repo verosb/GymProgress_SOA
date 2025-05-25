@@ -1,0 +1,31 @@
+<div class="home-container">
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="welcome-text">Bienvenido</h1>
+
+      <div class="quote-container">
+        <p class="motivational-quote">"{{ currentQuote }}"</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="features-section">
+    <h2 class="section-title">¿Qué quieres hacer hoy?</h2>
+
+    <div class="features-grid">
+      <div
+        *ngFor="let feature of features"
+        class="feature-card"
+        (click)="navigateTo(feature.route)"
+      >
+        <div class="feature-icon">{{ feature.icon }}</div>
+        <h3 class="feature-title">{{ feature.title }}</h3>
+        <p class="feature-description">{{ feature.description }}</p>
+        <div class="feature-action">
+          <span class="action-text">Explorar</span>
+          <span class="action-arrow">→</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
