@@ -1,0 +1,338 @@
+
+<!-- Panel de Administración de Usuarios -->
+<div class="admin-container">
+  <div class="admin-wrapper">
+    <div class="admin-content">
+      <h1 class="admin-title">
+        <i class="fas fa-users"></i>
+        Administración de Usuarios
+      </h1>
+
+      <!-- Selector de Tipo de Consulta -->
+      <div class="query-card">
+        <div class="query-header">
+          <h5><i class="fas fa-search"></i> Tipo de Consulta</h5>
+        </div>
+        <div class="query-body">
+          <div class="query-buttons">
+            <button
+              class="query-btn"
+              [class.active]="consulta.tipo === 'todos'"
+              (click)="cambiarTipoConsulta('todos')">
+              <i class="fas fa-users"></i>
+              <span>Todos los Usuarios</span>
+            </button>
+            <button
+              class="query-btn"
+              [class.active]="consulta.tipo === 'fecha'"
+              (click)="cambiarTipoConsulta('fecha')">
+              <i class="fas fa-calendar-day"></i>
+              <span>Por Fecha</span>
+            </button>
+            <button
+              class="query-btn"
+              [class.active]="consulta.tipo === 'usuario'"
+              (click)="cambiarTipoConsulta('usuario')">
+              <i class="fas fa-user-search"></i>
+              <span>Historial Usuario</span>
+            </button>
+            <button
+              class="query-btn"
+              [class.active]="consulta.tipo === 'usuario-fecha'"
+              (click)="cambiarTipoConsulta('usuario-fecha')">
+              <i class="fas fa-user-clock"></i>
+              <span>Usuario + Fecha</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paneles de Búsqueda Específica -->
+      <div class="search-card" *ngIf="consulta.tipo !== 'todos'">
+        <div class="search-header">
+          <h5><i class="fas fa-filter"></i> Parámetros de Búsqueda</h5>
+        </div>
+        <div class="search-body">
+          <!-- Búsqueda por Fecha -->
+          <div class="search-row" *ngIf="consulta.tipo === 'fecha'">
+            <div class="search-group">
+              <label for="fechaBusqueda" class="search-label">Fecha Específica:</label>
+              <input
+                type="date"
+                id="fechaBusqueda"
+                class="search-input"
+                [(ngModel)]="fechaBusqueda"
+                (change)="cargarUsuarios()"
+                required>
+              <small class="help-text">Seleccione la fecha para buscar usuarios registrados</small>
+            </div>
+          </div>
+
+          <!-- Búsqueda por Usuario -->
+          <div class="search-row" *ngIf="consulta.tipo === 'usuario'">
+            <div class="search-group">
+              <label for="usuarioBusqueda" class="search-label">Usuario (Email):</label>
+              <div class="search-input-group">
+                <input
+                  type="text"
+                  id="usuarioBusqueda"
+                  class="search-input"
+                  placeholder="Ingrese email"
+                  [(ngModel)]="usuarioBusqueda"
+                  (keyup.enter)="cargarUsuarios()"
+                  required>
+                <button class="search-btn-primary" type="button" (click)="cargarUsuarios()" [disabled]="!usuarioBusqueda.trim()">
+                  <i class="fas fa-search">Buscar</i>
+                </button>
+              </div>
+              <small class="help-text">Puede buscar por email completo, nombre exacto o UID</small>
+            </div>
+          </div>
+
+          <!-- Búsqueda Usuario + Fecha -->
+          <div class="search-row" *ngIf="consulta.tipo === 'usuario-fecha'">
+            <div class="search-group">
+              <label for="usuarioBusquedaFecha" class="search-label">Usuario:</label>
+              <input
+                type="text"
+                id="usuarioBusquedaFecha"
+                class="search-input"
+                placeholder="Email"
+                [(ngModel)]="usuarioBusquedaFecha"
+                required>
+              <small class="help-text">Email</small>
+            </div>
+            <div class="search-group">
+              <label for="fechaUsuarioBusqueda" class="search-label">Fecha:</label>
+              <input
+                type="date"
+                id="fechaUsuarioBusqueda"
+                class="search-input"
+                [(ngModel)]="fechaUsuarioBusqueda"
+                required>
+              <small class="help-text">Fecha específica</small>
+            </div>
+            <div class="search-group-btn">
+              <button
+                class="search-btn-primary"
+                (click)="cargarUsuarios()"
+                [disabled]="!usuarioBusquedaFecha.trim() || !fechaUsuarioBusqueda">
+                <i class="fas fa-search"></i>
+                Buscar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filtros y Ordenamiento -->
+      <div class="filters-card">
+        <div class="filters-header">
+          <h5><i class="fas fa-sort"></i> Filtros y Ordenamiento</h5>
+        </div>
+        <div class="filters-body">
+          <div class="filters-row">
+            <div class="filter-group">
+              <label for="filtroNombre" class="filter-label">Filtrar por Nombre:</label>
+              <input
+                type="text"
+                id="filtroNombre"
+                class="filter-input"
+                placeholder="Nombre del usuario"
+                [(ngModel)]="filtros.filtroNombre"
+                (input)="aplicarFiltros()">
+            </div>
+            <div class="filter-group">
+              <label for="filtroEmail" class="filter-label">Filtrar por Email:</label>
+              <input
+                type="text"
+                id="filtroEmail"
+                class="filter-input"
+                placeholder="Email del usuario"
+                [(ngModel)]="filtros.filtroEmail"
+                (input)="aplicarFiltros()">
+            </div>
+            <div class="filter-group">
+              <label for="ordenarPor" class="filter-label">Ordenar por:</label>
+              <select
+                id="ordenarPor"
+                class="filter-select"
+                [(ngModel)]="filtros.ordenarPor"
+                (change)="aplicarFiltros()">
+                <option value="fechaRegistro">Fecha de Registro</option>
+                <option value="nombre">Nombre</option>
+                <option value="email">Email</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="direccion" class="filter-label">Dirección:</label>
+              <select
+                id="direccion"
+                class="filter-select"
+                [(ngModel)]="filtros.direccion"
+                (change)="aplicarFiltros()">
+                <option value="asc">Ascendente</option>
+                <option value="desc">Descendente</option>
+              </select>
+            </div>
+          </div>
+          <div class="filters-actions">
+            <div class="actions-left">
+              <button class="btn-secondary" (click)="limpiarFiltros()">
+                <i class="fas fa-times"></i>
+                Limpiar Filtros
+              </button>
+              <button class="btn-export" (click)="exportarCSV()" [disabled]="usuariosFiltrados.length === 0">
+                <i class="fas fa-download"></i>
+                Exportar CSV
+              </button>
+            </div>
+            <div class="actions-right">
+              <span class="results-count">
+                Mostrando {{ usuariosFiltrados.length }} de {{ usuarios.length }} usuarios
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mensajes de Error -->
+      <div class="error-alert" *ngIf="error">
+        <i class="fas fa-exclamation-triangle"></i>
+        {{ error }}
+      </div>
+
+      <!-- Indicador de Carga -->
+      <div class="loading-container" *ngIf="cargando">
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+        </div>
+        <p class="loading-text">Cargando usuarios...</p>
+      </div>
+
+      <!-- Tabla de Usuarios -->
+      <div class="table-card" *ngIf="!cargando">
+        <div class="table-header">
+          <h5>
+            <i class="fas fa-table"></i>
+            Lista de Usuarios
+          </h5>
+          <span class="users-badge">{{ usuariosFiltrados.length }} usuarios</span>
+        </div>
+        <div class="table-body">
+          <div class="table-responsive">
+            <table class="users-table">
+              <thead class="table-head">
+                <tr>
+                  <th class="sortable-header" (click)="cambiarOrdenamiento('nombre')">
+                    Nombre
+                    <i class="fas fa-sort sort-icon"
+                       [ngClass]="{
+                         'fa-sort-up': filtros.ordenarPor === 'nombre' && filtros.direccion === 'asc',
+                         'fa-sort-down': filtros.ordenarPor === 'nombre' && filtros.direccion === 'desc'
+                       }"></i>
+                  </th>
+                  <th class="sortable-header" (click)="cambiarOrdenamiento('email')">
+                    Email
+                    <i class="fas fa-sort sort-icon"
+                       [ngClass]="{
+                         'fa-sort-up': filtros.ordenarPor === 'email' && filtros.direccion === 'asc',
+                         'fa-sort-down': filtros.ordenarPor === 'email' && filtros.direccion === 'desc'
+                       }"></i>
+                  </th>
+                  <th>Método Auth.</th>
+                  <th class="sortable-header" (click)="cambiarOrdenamiento('fechaRegistro')">
+                    Fecha Registro
+                    <i class="fas fa-sort sort-icon"
+                       [ngClass]="{
+                         'fa-sort-up': filtros.ordenarPor === 'fechaRegistro' && filtros.direccion === 'asc',
+                         'fa-sort-down': filtros.ordenarPor === 'fechaRegistro' && filtros.direccion === 'desc'
+                       }"></i>
+                  </th>
+                  <th>UID</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="user-row" *ngFor="let usuario of usuariosPaginados; trackBy: trackByUsuario">
+                  <td>
+                    <div class="user-info">
+                      <div class="user-avatar">
+                        <i class="fas fa-user-circle"></i>
+                      </div>
+                      <div class="user-details">
+                        <div class="user-name">{{ usuario.nombre }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="user-email">{{ usuario.email }}</span>
+                  </td>
+                  <td>
+                    <span class="auth-badge"
+                          [ngClass]="{
+                            'auth-google': usuario.metodoAutenticacion === 'Google',
+                            'auth-email': usuario.metodoAutenticacion === 'Email',
+                            'auth-facebook': usuario.metodoAutenticacion === 'Facebook',
+                            'auth-other': usuario.metodoAutenticacion !== 'Google' &&
+                                         usuario.metodoAutenticacion !== 'Email' &&
+                                         usuario.metodoAutenticacion !== 'Facebook'
+                          }">
+                      {{ usuario.metodoAutenticacion }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="date-text">{{ formatearFecha(usuario.fechaRegistro) }}</span>
+                  </td>
+                  <td>
+                    <code class="uid-code">{{ usuario.uid }}</code>
+                  </td>
+                </tr>
+                <tr class="empty-row" *ngIf="usuariosPaginados.length === 0">
+                  <td colspan="5">
+                    <div class="empty-state">
+                      <i class="fas fa-inbox empty-icon"></i>
+                      <p class="empty-text">No se encontraron usuarios con los criterios especificados</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paginación -->
+      <nav class="pagination-nav" *ngIf="totalPaginas > 1">
+        <ul class="pagination-list">
+          <li class="page-item" [class.disabled]="paginaActual === 1">
+            <button class="page-btn" (click)="cambiarPagina(paginaActual - 1)">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+          </li>
+          <li class="page-item"
+              *ngFor="let pagina of paginasArray"
+              [class.active]="pagina === paginaActual">
+            <button class="page-btn" (click)="cambiarPagina(pagina)">
+              {{ pagina }}
+            </button>
+          </li>
+          <li class="page-item" [class.disabled]="paginaActual === totalPaginas">
+            <button class="page-btn" (click)="cambiarPagina(paginaActual + 1)">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Información de Paginación -->
+      <div class="pagination-info" *ngIf="usuariosFiltrados.length > 0">
+        <span class="pagination-text">
+          Página {{ paginaActual }} de {{ totalPaginas }}
+          ({{ ((paginaActual - 1) * elementosPorPagina) + 1 }} -
+          {{ Math.min(paginaActual * elementosPorPagina, usuariosFiltrados.length) }}
+          de {{ usuariosFiltrados.length }} usuarios)
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
